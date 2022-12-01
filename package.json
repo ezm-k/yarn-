@@ -1,0 +1,51 @@
+{
+  "name": "htdocs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/preset-env": "^7.12.1",
+    "autoprefixer": "^10.0.2",
+    "babel-loader": "^8.2.1",
+    "browser-sync": "^2.26.13",
+    "core-js": "^3.26.1",
+    "cpx": "^1.5.0",
+    "del-cli": "^3.0.1",
+    "npm-run-all": "^4.1.5",
+    "onchange": "^7.1.0",
+    "postcss": "^8.1.7",
+    "postcss-cli": "^8.2.0",
+    "pug-cli": "git+https://github.com/pugjs/pug-cli.git#0eb8d37",
+    "pug-plain-loader": "^1.1.0",
+    "sass": "^1.56.1",
+    "stylelint-order": "^4.1.0",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0"
+  },
+ "browserslist": [
+    "last 2 versions",
+    "not ie < 11",
+    "Android >= 4",
+    "iOS >= 10"
+  ],
+  "scripts": {
+    "build": "npm-run-all -s clean copy:mock copy:js css autoprefixer clean:_app.css pug webpack",
+    "watch": "npm-run-all -p w:copy:mock w:copy:js w:css w:autoprefixer w:webpack pug w:pug server clean:_app.css",
+    "clean": "del-cli dist/*",
+    "clean:_app.css": "del-cli src/scss/{_app.css,_app.css.map}",
+    "copy:mock": "cpx \"./src/mock/**/*.{html,png,jpg,svg,gif}\" ./dist -v",
+    "copy:js": "cpx \"./src/js/{first,vendor}.js\" ./dist/common/js/ -v",
+    "css": "sass src/scss/app.scss src/scss/_app.css",
+    "autoprefixer": "postcss -o dist/common/css/app.css src/scss/_app.css",
+    "pug": "pug -b ./src/mock/ -P -o ./dist/ ./src/mock/",
+    "webpack": "webpack --mode development",
+    "w:copy:mock": "cpx \"./src/mock/**/*.{html,png,jpg,svg,gif}\" ./dist -v -w",
+    "w:copy:js": "cpx ./src/mock/first.js ./dist/common/js/ -v -w",
+    "w:css": "sass src/scss/app.scss src/scss/_app.css -w",
+    "w:autoprefixer": "postcss -o dist/common/css/app.css src/scss/_app.css -w",
+    "w:webpack": "webpack -w --mode development",
+    "w:pug": "pug -b ./src/mock/ -P -o ./dist/ ./src/mock/ -w",
+    "server": "browser-sync start --config bs-config.js"
+  }
+}
